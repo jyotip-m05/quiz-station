@@ -21,7 +21,7 @@ const AboutPage = () => {
                 <h4 className="mt-4 mb-3">Features</h4>
                 <div className="row">
                   <div className="col-md-6 mb-3">
-                    <div className="card bg-dark border-secondary h-100">
+                    <div className="card bg-dark border-secondary h-100 text-white">
                       <div className="card-header">
                         <h5>Multiple Difficulty Levels</h5>
                       </div>
@@ -31,7 +31,7 @@ const AboutPage = () => {
                     </div>
                   </div>
                   <div className="col-md-6 mb-3">
-                    <div className="card bg-dark border-secondary h-100">
+                    <div className="card bg-dark border-secondary h-100 text-white">
                       <div className="card-header">
                         <h5>Timed Quizzes</h5>
                       </div>
@@ -41,7 +41,7 @@ const AboutPage = () => {
                     </div>
                   </div>
                   <div className="col-md-6 mb-3">
-                    <div className="card bg-dark border-secondary h-100">
+                    <div className="card bg-dark border-secondary h-100 text-white">
                       <div className="card-header">
                         <h5>Detailed Results</h5>
                       </div>
@@ -51,7 +51,7 @@ const AboutPage = () => {
                     </div>
                   </div>
                   <div className="col-md-6 mb-3">
-                    <div className="card bg-dark border-secondary h-100">
+                    <div className="card bg-dark border-secondary h-100 text-white">
                       <div className="card-header">
                         <h5>Leaderboard</h5>
                       </div>
