@@ -56,7 +56,7 @@ const ScoreSummary = ({ onPlayAgain }) => {
     <div className="score-summary container py-5 bg-dark text-white">
       <div className="row justify-content-center">
         <div className="col-md-10">
-          <div className="card bg-dark text-white mb-4">
+          <div className="card bg-dark text-white mb-4 text-white">
             <div className="card-header text-center">
               <h2>Quiz Results</h2>
             </div>
@@ -72,7 +72,7 @@ const ScoreSummary = ({ onPlayAgain }) => {
 
               <div className="row mb-4">
                 <div className="col-md-6">
-                  <div className="card bg-dark border-secondary mb-3">
+                  <div className="card bg-dark border-secondary mb-3 text-white">
                     <div className="card-header">Player Info</div>
                     <div className="card-body">
                       <p><strong>Name:</strong> {quizData.name}</p>
@@ -87,7 +87,7 @@ const ScoreSummary = ({ onPlayAgain }) => {
                   </div>
                 </div>
                 <div className="col-md-6">
-                  <div className="card bg-dark border-secondary">
+                  <div className="card bg-dark border-secondary text-white">
                     <div className="card-header">Performance Summary</div>
                     <div className="card-body">
                       <p><strong>Correct Answers:</strong> {quizData.score}</p>
