@@ -238,7 +238,7 @@ let currentSession = {
   score: 0,
   timeTakenInMinutes: 0,
   questionWiseScore: [],
-  questionWiseTimeTaken: []
+  questionWiseTimeTaken: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 };
 
 // Function to save quiz result to localStorage----------------------------------------------------------------
@@ -285,7 +285,7 @@ const resetCurrentSession = () => {
     score: 0,
     timeTakenInMinutes: 0,
     questionWiseScore: [],
-    questionWiseTimeTaken: []
+    questionWiseTimeTaken: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
   };
 };
 
