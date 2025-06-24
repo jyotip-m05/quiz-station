@@ -8,6 +8,7 @@ const QuizEngine = ({ onQuizComplete }) => {
   const [selectedAnswers, setSelectedAnswers] = useState([]);
   const [questionStartTimes, setQuestionStartTimes] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [questionTimings, setQuestionTimings] = useState({}); // Add this new state
 
   // Initialize timer with 15 minutes--------------------------------------------------------------------
   const timer = TimeDisplay({ 
@@ -43,17 +44,17 @@ const QuizEngine = ({ onQuizComplete }) => {
     setSelectedAnswers(newSelectedAnswers);
   };
 
-  // Navigate to next question
+  // Navigate to next question--------------------------------------------------------------------------------
   const goToNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
       // Record time spent on current question
       recordQuestionTime();
 
-      // Move to next question
+      // Move to next question--------------------------------------------------------------------------------
       setCurrentQuestionIndex(prevIndex => {
         const newIndex = prevIndex + 1;
 
-        // Set start time for the next question if it hasn't been visited yet
+        // Set start time for the next question if it hasn't been visited yet----------------------------------
         if (questionStartTimes[newIndex] === null) {
           const newTimes = [...questionStartTimes];
           newTimes[newIndex] = Date.now();
@@ -92,12 +93,18 @@ const QuizEngine = ({ onQuizComplete }) => {
     }
   };
 
-  // Record time spent on the current question
+  // Modify recordQuestionTime to store actual time spent
   const recordQuestionTime = () => {
     const currentTime = Date.now();
     const startTime = questionStartTimes[currentQuestionIndex];
 
     if (startTime) {
+      // Store the time spent for current question
+      setQuestionTimings(prev => ({
+        ...prev,
+        [currentQuestionIndex]: (prev[currentQuestionIndex] || 0) + (currentTime - startTime)
+      }));
+
       const newTimes = [...questionStartTimes];
       // Update start time to current time (for if we come back to this question)
       newTimes[currentQuestionIndex] = currentTime;
@@ -105,7 +112,7 @@ const QuizEngine = ({ onQuizComplete }) => {
     }
   };
 
-  // Handle quiz submission
+  // Modify handleSubmit with correct time calculations
   const handleSubmit = () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
@@ -113,7 +120,7 @@ const QuizEngine = ({ onQuizComplete }) => {
     // Record time for the last question
     recordQuestionTime();
 
-    // Calculate score
+    // Calculate score (existing code)
     let score = 0;
     const questionWiseScore = [];
 
@@ -123,31 +130,16 @@ const QuizEngine = ({ onQuizComplete }) => {
       if (isCorrect) score++;
     });
 
-    // Calculate time taken for each question in seconds
+    // Calculate actual time taken for each question in seconds
     const questionWiseTimeTaken = [];
     let totalTimeInSeconds = 0;
 
-    // If the quiz ended due to time up, use the full 25 minutes
-    if (!timer.isRunning && timer.timeRemaining === 0) {
-      totalTimeInSeconds = 25 * 60;
-
-      // Distribute time evenly among answered questions
-      const answeredQuestions = selectedAnswers.filter(answer => answer !== null).length;
-      const timePerQuestion = totalTimeInSeconds / (answeredQuestions || 1);
-
-      selectedAnswers.forEach(answer => {
-        questionWiseTimeTaken.push(answer !== null ? timePerQuestion.toFixed(1) : 0);
-      });
-    } else {
-      // Calculate time based on the timer
-      totalTimeInSeconds = (25 * 60) - timer.timeRemaining;
-
-      // For now, distribute time evenly (we don't have exact times per question)
-      const timePerQuestion = totalTimeInSeconds / questions.length;
-      questions.forEach(() => {
-        questionWiseTimeTaken.push(timePerQuestion.toFixed(1));
-      });
-    }
+    questions.forEach((_, index) => {
+      const timeSpent = questionTimings[index] || 0;
+      const timeInSeconds = timeSpent / 1000; // Convert milliseconds to seconds
+      questionWiseTimeTaken.push(timeInSeconds.toFixed(1));
+      totalTimeInSeconds += timeInSeconds;
+    });
 
     // Update current session
     currentSession.score = score;
@@ -155,11 +147,10 @@ const QuizEngine = ({ onQuizComplete }) => {
     currentSession.questionWiseScore = questionWiseScore;
     currentSession.questionWiseTimeTaken = questionWiseTimeTaken;
 
-    // Save to leaderboard in localStorage
+    // Save to leaderboard (existing code)
     try {
       const existingData = localStorage.getItem('quizLeaderboard');
       const leaderboard = existingData ? JSON.parse(existingData) : [];
-
       leaderboard.push({...currentSession});
       localStorage.setItem('quizLeaderboard', JSON.stringify(leaderboard));
     } catch (error) {
