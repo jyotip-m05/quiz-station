@@ -117,8 +117,15 @@ const QuizEngine = ({ onQuizComplete }) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
-    // Record time for the last question
-    recordQuestionTime();
+    // Record time for the current question before submitting
+    const currentTime = Date.now();
+    const startTime = questionStartTimes[currentQuestionIndex];
+    const finalQuestionTimings = { ...questionTimings };
+
+    if (startTime) {
+      // Add time spent on current question to final timings
+      finalQuestionTimings[currentQuestionIndex] = (finalQuestionTimings[currentQuestionIndex] || 0) + (currentTime - startTime);
+    }
 
     // Calculate score (existing code)
     let score = 0;
@@ -135,7 +142,7 @@ const QuizEngine = ({ onQuizComplete }) => {
     let totalTimeInSeconds = 0;
 
     questions.forEach((_, index) => {
-      const timeSpent = questionTimings[index] || 0;
+      const timeSpent = finalQuestionTimings[index] || 0;
       const timeInSeconds = timeSpent / 1000; // Convert milliseconds to seconds
       questionWiseTimeTaken.push(timeInSeconds.toFixed(1));
       totalTimeInSeconds += timeInSeconds;
